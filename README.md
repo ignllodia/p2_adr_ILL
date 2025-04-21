@@ -65,6 +65,31 @@ Las clases principales son:
 - KalmanFilter – Para el modelo simple (posición).
 - KalmanFilter_2 – Para el modelo completo (posición + velocidad).
 
+## Configuración de ruido
+
+El sistema permite configurar diferentes niveles de ruido para los experimentos. Para cambiar las configuraciones de ruido, edite los parámetros en los archivos `kf_estimation.py` y `kf_estimation_vel.py`.
+
+### Ejemplo de configuraciones:
+1. **Ruido bajo**:
+   ```python
+   proc_noise_std = [0.01, 0.01, 0.005]
+   obs_noise_std = [0.01, 0.01, 0.005]
+   ```
+
+2. **Ruido alto en la medida**:
+   ```python
+   proc_noise_std = [0.02, 0.02, 0.01]
+   obs_noise_std = [0.1, 0.1, 0.05]
+   ```
+
+3. **Ruido alto en el proceso**:
+   ```python
+   proc_noise_std = [0.1, 0.1, 0.05]
+   obs_noise_std = [0.02, 0.02, 0.01]
+   ```
+
+Para ejecutar los experimentos, simplemente modifique las configuraciones y ejecute los nodos correspondientes.
+
 ## Entrega
 Los estudiantes deberán subir a GitHub o entregar un archivo .zip con nombre: p2_kf_<iniciales> (por ejemplo: p2_kf_mgc).
 

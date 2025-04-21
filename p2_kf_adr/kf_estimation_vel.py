@@ -25,7 +25,12 @@ class KalmanFilterPureNode(Node):
         initial_state = np.zeros(6)
         initial_covariance = np.eye(6) * 0.1
 
-        self.kf = KalmanFilter_2(initial_state, initial_covariance)
+        # Add noise configuration parameters
+        proc_noise_std = [0.02, 0.02, 0.01, 0.02, 0.02, 0.01]  # Process noise
+        obs_noise_std = [0.02, 0.02, 0.01, 0.02, 0.02, 0.01]  # Observation noise
+
+        # Pass noise configurations to KalmanFilter_2
+        self.kf = KalmanFilter_2(initial_state, initial_covariance, proc_noise_std, obs_noise_std)
 
         self.subscription = self.create_subscription(
             Odometry,
