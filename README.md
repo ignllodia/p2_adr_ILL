@@ -90,6 +90,68 @@ El sistema permite configurar diferentes niveles de ruido para los experimentos.
 
 Para ejecutar los experimentos, simplemente modifique las configuraciones y ejecute los nodos correspondientes.
 
+## Implementación de cada parte
+
+### 1. Filtro de Kalman
+El filtro de Kalman se implementa en el archivo `kalman_filter.py`. Este archivo contiene dos clases principales:
+- **KalmanFilter**: Diseñado para estimar la posición del robot utilizando un modelo de estado básico.
+- **KalmanFilter_2**: Extiende el modelo de estado para incluir velocidad, permitiendo una estimación más completa.
+
+Ambas clases implementan los métodos `predict` y `update` para realizar las etapas de predicción y corrección del filtro.
+
+### 2. Modelos de Movimiento y Observación
+- **`motion_models.py`**: Define las matrices de transición de estado (`A`) y de entrada de control (`B`) para los modelos de movimiento.
+- **`observation_models.py`**: Proporciona las matrices de observación (`C`) para los modelos de sensor.
+
+### 3. Nodos de ROS 2
+- **`kf_estimation.py`**: Nodo que utiliza el filtro de Kalman básico para estimar la posición.
+- **`kf_estimation_vel.py`**: Nodo que utiliza el filtro de Kalman extendido para estimar posición y velocidad.
+
+Ambos nodos suscriben datos de odometría y publican las estimaciones en tópicos de ROS 2.
+
+### 4. Visualización
+El archivo `visualization.py` permite visualizar las trayectorias estimadas y reales en RViz y Matplotlib. Esto facilita la comparación entre los datos reales y las estimaciones del filtro.
+
+### 5. Configuración de Ruido
+Se pueden configurar diferentes niveles de ruido en los archivos `kf_estimation.py` y `kf_estimation_vel.py`. Esto permite realizar experimentos con distintas condiciones de ruido.
+
+---
+
+## Resultados Observados
+
+### Caso 1: Ruido Bajo
+- **Configuración**:
+  ```python
+  proc_noise_std = [0.01, 0.01, 0.005]
+  obs_noise_std = [0.01, 0.01, 0.005]
+  ```
+- **Resultados**: El filtro de Kalman produce estimaciones muy cercanas a la trayectoria real. La incertidumbre es mínima y las trayectorias estimadas y reales casi se superponen.
+
+### Caso 2: Ruido Alto en la Medida
+- **Configuración**:
+  ```python
+  proc_noise_std = [0.02, 0.02, 0.01]
+  obs_noise_std = [0.1, 0.1, 0.05]
+  ```
+- **Resultados**: Las estimaciones muestran mayor variabilidad debido al ruido en las mediciones. Sin embargo, el filtro logra suavizar las trayectorias.
+
+### Caso 3: Ruido Alto en el Proceso
+- **Configuración**:
+  ```python
+  proc_noise_std = [0.1, 0.1, 0.05]
+  obs_noise_std = [0.02, 0.02, 0.01]
+  ```
+- **Resultados**: Las estimaciones son menos precisas y presentan un mayor desfase respecto a la trayectoria real. Esto se debe a la incertidumbre en el modelo de movimiento.
+
+---
+
+## Análisis
+1. **Ruido Bajo**: En este caso, el filtro de Kalman funciona de manera óptima, ya que tanto el modelo de movimiento como las mediciones son confiables.
+2. **Ruido Alto en la Medida**: El filtro depende más del modelo de movimiento para corregir las estimaciones, lo que puede introducir errores si el modelo no es perfecto.
+3. **Ruido Alto en el Proceso**: La incertidumbre en el modelo de movimiento afecta significativamente las estimaciones, ya que el filtro no puede confiar completamente en las predicciones.
+
+En general, el filtro de Kalman es robusto frente a niveles moderados de ruido, pero su desempeño depende de un equilibrio adecuado entre las incertidumbres del modelo y las mediciones.
+
 ## Entrega
 Los estudiantes deberán subir a GitHub o entregar un archivo .zip con nombre: p2_kf_<iniciales> (por ejemplo: p2_kf_mgc).
 
