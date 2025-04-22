@@ -14,7 +14,6 @@ from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovarianceStamped
 import numpy as np
-from kalman_filter import KalmanFilter_2
 import math
 
 class KalmanFilterPureNode(Node):
