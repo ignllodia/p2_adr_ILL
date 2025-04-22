@@ -117,7 +117,7 @@ Se pueden configurar diferentes niveles de ruido en los archivos `kf_estimation.
 
 ---
 
-## Resultados Observados
+## Resultados Estimados
 
 ### Caso 1: Ruido Bajo
 - **Configuración**:
