@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/kf_estimation.launch.py']),
+        ('share/' + package_name + '/launch', ['launch/' + f for f in ['kf_estimation.launch.py']]),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
